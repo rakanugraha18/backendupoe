@@ -1,7 +1,17 @@
 import express from "express";
-import passport from "passport"; // 🔥 FIX: Import passport
-import { register, login, oauthLogin } from "../controllers/user.controller.js";
+import passport from "passport";
+import {
+  register,
+  login,
+  oauthLogin,
+  getProfile,
+  logout,
+} from "../controllers/user.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -11,9 +21,8 @@ router.post("/login", login);
 router.post("/oauth", oauthLogin);
 
 // 🔹 Profile Route (hanya bisa diakses oleh user yang login)
-router.get("/profile", authMiddleware, (req, res) => {
-  res.json({ message: "Ini adalah halaman profil", user: req.user });
-});
+router.get("/profile", authMiddleware, getProfile);
+router.post("/logout", authMiddleware, logout);
 
 // 🔹 Google OAuth
 router.get(
@@ -25,23 +34,13 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    // 🔥 FIX: Redirect ke frontend atau kirim token
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
-  }
-);
+    // Buat JWT token
+    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
-// 🔹 Facebook OAuth
-router.get(
-  "/auth/facebook",
-  passport.authenticate("facebook", { scope: ["email"] })
-);
-
-router.get(
-  "/auth/facebook/callback",
-  passport.authenticate("facebook", { failureRedirect: "/" }),
-  (req, res) => {
-    // 🔥 FIX: Redirect ke frontend atau kirim token
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+    // 🔥 Kirim JSON langsung (tanpa redirect)
+    res.json({ message: "Login berhasil!", token, user: req.user });
   }
 );
 

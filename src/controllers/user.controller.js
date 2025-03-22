@@ -57,38 +57,36 @@ export const register = async (req, res) => {
 };
 
 // 🔹 Login user biasa
-export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+export const login = async (req, res, next) => {
+  const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email dan password harus diisi" });
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user || !user.password) {
+      return res.status(400).json({ message: "Email atau password salah" });
     }
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User tidak ditemukan" });
-
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Password salah" });
 
-    const token = generateToken(user._id);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Email atau password salah" });
+    }
 
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      })
-      .json({ message: "Login berhasil", user });
+    // 🔹 Gunakan Passport untuk membuat session login
+    req.login(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.json({ message: "Login berhasil!", user });
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Terjadi kesalahan saat login" });
+    res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 };
 
-// 🔹 OAuth login (Google/Facebook)
+// 🔹 OAuth login (Google)
 export const oauthLogin = async (req, res) => {
   try {
     const { oauthProvider, oauthId, email, firstName, lastName, avatar } =
@@ -146,4 +144,27 @@ export const logout = (req, res) => {
       sameSite: "strict",
     })
     .json({ message: "Logout berhasil" });
+};
+
+// 🔹 Get Profile
+export const getProfile = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Silakan login terlebih dahulu" });
+    }
+
+    // req.user sudah diisi oleh passport
+    const user = await User.findById(req.user._id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User tidak ditemukan" });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Terjadi kesalahan saat mengambil profil" });
+  }
 };
