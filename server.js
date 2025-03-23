@@ -1,14 +1,15 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import app from "./src/app.js";
+import swaggerDocs from "./src/docs/swager.js";
+import connectDB from "./src/config/db.js";
 
 dotenv.config();
 
-// Koneksi ke MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+// Konfigurasi Swagger
+swaggerDocs(app);
+
+// Koneksi ke database
+connectDB();
 
 // Jalankan server
 const PORT = process.env.PORT || 5000;
