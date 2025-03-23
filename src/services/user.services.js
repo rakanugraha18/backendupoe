@@ -4,8 +4,41 @@ import CustomError from "../utils/cumtom.error.js";
 import bcrypt from "bcryptjs";
 
 class UserService {
+  // async registerUser({ firstName, lastName, username, email, password }) {
+  //   // 🔹 Cek apakah email atau username sudah digunakan
+  //   const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+  //   if (existingUser) {
+  //     throw new CustomError("Email atau username sudah digunakan", 400);
+  //   }
+
+  //   // 🔹 Hash password sebelum disimpan
+  //   const hashedPassword = await bcrypt.hash(password, 10);
+
+  //   // 🔹 Simpan user baru di database
+  //   const newUser = await User.create({
+  //     firstName,
+  //     lastName,
+  //     username,
+  //     email,
+  //     password: hashedPassword,
+  //   });
+
+  //   if (!newUser) {
+  //     throw new CustomError("Gagal membuat user", 500);
+  //   }
+
+  //   // 🔹 Pastikan password tidak dikembalikan
+  //   return {
+  //     id: newUser._id.toString(),
+  //     firstName: newUser.firstName,
+  //     lastName: newUser.lastName,
+  //     username: newUser.username,
+  //     email: newUser.email,
+  //   };
+  // }
+
   async registerUser({ firstName, lastName, username, email, password }) {
-    // 🔹 Cek apakah email atau username sudah digunakan
+    // 🔹 Cek apakah user sudah ada
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       throw new CustomError("Email atau username sudah digunakan", 400);
@@ -14,7 +47,7 @@ class UserService {
     // 🔹 Hash password sebelum disimpan
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 🔹 Simpan user baru di database
+    // 🔹 Buat user baru
     const newUser = await User.create({
       firstName,
       lastName,
@@ -27,7 +60,7 @@ class UserService {
       throw new CustomError("Gagal membuat user", 500);
     }
 
-    // 🔹 Pastikan password tidak dikembalikan
+    // 🔹 Ubah `_id` ke `id` & hapus password dari response
     return {
       id: newUser._id.toString(),
       firstName: newUser.firstName,
