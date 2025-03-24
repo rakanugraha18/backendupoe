@@ -1,122 +1,172 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "English Upoe",
-    "version": "1.0.0"
+    "title": "English Upoe API",
+    "version": "1.0.0",
+    "description": "Dokumentasi API untuk English Upoe dengan session-based authentication"
   },
   "servers": [
     {
-      "url": "http://{{baseurl}}"
+      "url": "http://localhost:5000/api",
+      "description": "Local server"
     }
   ],
   "paths": {
-    "/profile": {
+    "/users/profile": {
       "get": {
-        "tags": [
-          "default"
-        ],
-        "summary": "profil",
+        "summary": "Get user profile",
+        "description": "Mengambil data profil user yang sedang login",
+        "security": [{ "sessionAuth": [] }],
         "responses": {
           "200": {
-            "description": "Successful response",
+            "description": "Berhasil mengambil profil",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "example": {
+                  "id": "123456",
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "email": "johndoe@example.com"
+                }
+              }
             }
+          },
+          "401": {
+            "description": "Unauthorized (User belum login)"
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Mendaftarkan user baru",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "firstName": "John",
+                "lastName": "Doe",
+                "username": "johndoe",
+                "email": "johndoe@gmail.com",
+                "password": "password123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User berhasil didaftarkan"
+          },
+          "400": {
+            "description": "Gagal registrasi"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login user",
+        "description": "User melakukan login dengan email dan password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "email": "johndoe@gmail.com",
+                "password": "password123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login berhasil (Session dimulai, cookie dikirim)",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Session ID dikirim sebagai cookie",
+                "schema": {
+                  "type": "string",
+                  "example": "connect.sid=s%3Axyz123abc; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "summary": "Logout user",
+        "description": "Mengakhiri sesi user",
+        "security": [{ "sessionAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Logout berhasil (Session dihapus)"
           }
         }
       }
     },
     "/auth/google": {
       "get": {
-        "tags": [
-          "default"
-        ],
-        "summary": "get google login auth",
+        "summary": "Google OAuth Login",
+        "description": "Menggunakan Google untuk login. **Buka link ini http://localhost:5000/api/auth/google di browser**, lalu pilih akun Google Anda. Jika berhasil, session akan dibuat.",
         "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {}
-            }
+          "302": {
+            "description": "Redirect ke halaman autentikasi Google"
           }
         }
       }
     },
-    "/register": {
-      "post": {
-        "tags": [
-          "default"
-        ],
-        "summary": "register",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "example": {
-                  "firstName": "John2",
-                  "lastName": "Doe",
-                  "username": "johndoe2",
-                  "email": "johndoe2@gmail.com",
-                  "password": "password123"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {}
-            }
-          }
-        }
-      }
-    },
-    "/login": {
-      "post": {
-        "tags": [
-          "default"
-        ],
-        "summary": "login",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "example": {
-                  "email": "johndoe2@gmail.com",
-                  "password": "password123"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {}
-            }
-          }
-        }
-      }
-    },
-    "/logout": {
+    "/auth/status": {
       "get": {
-        "tags": [
-          "default"
-        ],
-        "summary": "logout",
+        "summary": "Cek Status Login",
+        "description": "Cek apakah user sudah login menggunakan Google OAuth.",
+        "security": [{ "sessionAuth": [] }],
         "responses": {
           "200": {
-            "description": "Successful response",
+            "description": "User sudah login",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "example": {
+                  "id": "123456",
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "email": "johndoe@gmail.com"
+                }
+              }
             }
+          },
+          "401": {
+            "description": "User belum login"
           }
         }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "summary": "Logout Google OAuth",
+        "description": "Menghapus sesi login Google",
+        "security": [{ "sessionAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Logout berhasil"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Gunakan cookie session untuk autentikasi"
       }
     }
   }
