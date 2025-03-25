@@ -99,6 +99,17 @@
         }
       }
     },
+    "/auth/google": {
+      "get": {
+        "summary": "Google OAuth Login",
+        "description": "Menggunakan Google untuk login. **Buka link ini http://localhost:5000/api/auth/google di browser**, lalu pilih akun Google Anda. Jika berhasil, session akan dibuat dan bisa cek di endpoint /users/profil dan responnya akan menunjukan data user yang sesuai dengan user google tersebut.",
+        "responses": {
+          "302": {
+            "description": "Redirect ke halaman autentikasi Google"
+          }
+        }
+      }
+    },
     "/users/logout": {
       "post": {
         "summary": "Logout user",
@@ -107,54 +118,6 @@
         "responses": {
           "200": {
             "description": "Logout berhasil (Session dihapus)"
-          }
-        }
-      }
-    },
-    "/auth/google": {
-      "get": {
-        "summary": "Google OAuth Login",
-        "description": "Menggunakan Google untuk login. **Buka link ini http://localhost:5000/api/auth/google di browser**, lalu pilih akun Google Anda. Jika berhasil, session akan dibuat.",
-        "responses": {
-          "302": {
-            "description": "Redirect ke halaman autentikasi Google"
-          }
-        }
-      }
-    },
-    "/auth/status": {
-      "get": {
-        "summary": "Cek Status Login",
-        "description": "Cek apakah user sudah login menggunakan Google OAuth.",
-        "security": [{ "sessionAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "User sudah login",
-            "content": {
-              "application/json": {
-                "example": {
-                  "id": "123456",
-                  "firstName": "John",
-                  "lastName": "Doe",
-                  "email": "johndoe@gmail.com"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "User belum login"
-          }
-        }
-      }
-    },
-    "/auth/logout": {
-      "get": {
-        "summary": "Logout Google OAuth",
-        "description": "Menghapus sesi login Google",
-        "security": [{ "sessionAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "Logout berhasil"
           }
         }
       }
