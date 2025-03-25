@@ -169,7 +169,7 @@ Additionally, users can log in using **Google OAuth**.
 
 ### **8. Get User Profile**
 
-- **Endpoint:** `GET /api/users/me`
+- **Endpoint:** `GET /api/users/profile`
 - **Headers:**
   ```
   Authorization: Session <session_token>
@@ -177,13 +177,22 @@ Additionally, users can log in using **Google OAuth**.
 - **Response:**
   ```json
   {
-    "_id": "65aef12345abcdef67890",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "level": "Intermediate",
-    "selected_topics": ["65aefabcdef1234567890"],
-    "daily_words": ["65aef0987654321abcdef"],
-    "created_at": "2025-03-25T12:00:00.000Z"
+    "success": true,
+    "statusCode": 200,
+    "message": "User berhasil diambil",
+    "data": {
+      "_id": "67e03bf6b5da7efbd6c15dc2",
+      "email": "johndoe@gmail.com",
+      "username": "johndoe",
+      "firstName": "John",
+      "lastName": "Doe",
+      "level": "Intermediate",
+      "selected_topics": ["65aefabcdef1234567890"],
+      "daily_words": ["65aef0987654321abcdef"],
+      "createdAt": "2025-03-23T16:51:02.113Z",
+      "updatedAt": "2025-03-23T16:51:02.113Z",
+      "__v": 0
+    }
   }
   ```
 
@@ -222,6 +231,7 @@ This API follows standard HTTP status codes:
 - `400 Bad Request` - Invalid input
 - `401 Unauthorized` - Invalid or missing session token
 - `404 Not Found` - Resource not found
+- `500 Internal Server Error` - Server Error
 
 ## **License**
 
