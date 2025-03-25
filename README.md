@@ -24,23 +24,29 @@ Additionally, users can log in using **Google OAuth**.
 
 - **Endpoint:** `POST /api/auth/register`
 - **Request Body:**
+
   ```json
   {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "level": "Intermediate"
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe",
+    "email": "johndoe@gmail.com",
+    "password": "password123"
   }
   ```
+
 - **Response:**
   ```json
   {
-    "message": "User registered successfully",
-    "user": {
-      "_id": "65aef12345abcdef67890",
-      "name": "John Doe",
-      "email": "john@example.com",
-      "level": "Intermediate"
+    "success": true,
+    "statusCode": 201,
+    "message": "User berhasil terdaftar dan login",
+    "data": {
+      "id": "67e2d9dbbb62dca2e27d7157",
+      "firstName": "John",
+      "lastName": "Doe",
+      "username": "johndoe",
+      "email": "johndoe@gmail.com"
     }
   }
   ```
@@ -51,39 +57,51 @@ Additionally, users can log in using **Google OAuth**.
 - **Request Body:**
   ```json
   {
-    "email": "john@example.com",
+    "email": "johndoe@gmail.com",
     "password": "password123"
   }
   ```
 - **Response:**
   ```json
   {
-    "message": "Login successful",
-    "session_token": "session_token_here"
+    "success": true,
+    "statusCode": 200,
+    "message": "Login berhasil",
+    "data": {
+      "id": "67e03bf6b5da7efbd6c15dc2",
+      "firstName": "John",
+      "lastName": "Doe",
+      "username": "johndoe",
+      "email": "johndoe@gmail.com"
+    }
   }
   ```
 - **Notes:** The session token is stored in **Redis cache** and must be included in the `Authorization` header for authenticated requests.
 
+---
+
 ### **3. Login with Google OAuth**
 
 - **Endpoint:** `GET /api/auth/google`
-- **Description:** Redirects the user to Google for authentication.
+- **Description:** Open your browser to run the Endpoint, then follow the google login.
 
-- **Endpoint:** `GET /api/auth/google/callback`
+---
+
+### **4. Check Status login with Google OAuth**
+
 - **Response:**
   ```json
   {
-    "message": "Login successful",
-    "session_token": "session_token_here",
-    "user": {
-      "_id": "65aef12345abcdef67890",
-      "name": "John Doe",
-      "email": "john@example.com"
-    }
+    "id": "67de72ea56eee7b05a4063f0",
+    "firstName": "Recsy",
+    "lastName": "LR",
+    "email": "recsylr@gmail.com"
   }
   ```
 
-### **4. Logout User**
+---
+
+### **5. Logout User**
 
 - **Endpoint:** `POST /api/auth/logout`
 - **Headers:**
@@ -99,9 +117,57 @@ Additionally, users can log in using **Google OAuth**.
 
 ---
 
+## **Topics API**
+
+### **6. Get All Topics**
+
+- **Endpoint:** `GET /api/topics`
+- **Response:**
+  ```json
+  [
+    {
+      "_id": "65aefabcdef1234567890",
+      "name": "Food & Drinks"
+    },
+    {
+      "_id": "65aef123456789abcdef0",
+      "name": "Travel & Places"
+    }
+  ]
+  ```
+
+---
+
+## **Words API**
+
+### **7. Get Words by Topic**
+
+- **Endpoint:** `GET /api/words?topic_id=65aefabcdef1234567890`
+- **Response:**
+  ```json
+  [
+    {
+      "_id": "65aef0987654321abcdef",
+      "word": "Apple",
+      "translation": "Apel",
+      "example_sentence": "I eat an apple every day.",
+      "difficulty": "Beginner"
+    },
+    {
+      "_id": "65aef1234abcd5678ef90",
+      "word": "Banana",
+      "translation": "Pisang",
+      "example_sentence": "Bananas are yellow.",
+      "difficulty": "Beginner"
+    }
+  ]
+  ```
+
+---
+
 ## **User API**
 
-### **5. Get User Profile**
+### **8. Get User Profile**
 
 - **Endpoint:** `GET /api/users/me`
 - **Headers:**
@@ -121,7 +187,7 @@ Additionally, users can log in using **Google OAuth**.
   }
   ```
 
-### **6. Get User by ID**
+### **9. Get User by ID**
 
 - **Endpoint:** `GET /api/users/:id`
 - **Headers:**
@@ -144,54 +210,6 @@ Additionally, users can log in using **Google OAuth**.
 - **Notes:**
   - This endpoint can only be accessed by authenticated users.
   - It does not return the user's email for privacy reasons.
-
----
-
-## **Topics API**
-
-### **7. Get All Topics**
-
-- **Endpoint:** `GET /api/topics`
-- **Response:**
-  ```json
-  [
-    {
-      "_id": "65aefabcdef1234567890",
-      "name": "Food & Drinks"
-    },
-    {
-      "_id": "65aef123456789abcdef0",
-      "name": "Travel & Places"
-    }
-  ]
-  ```
-
----
-
-## **Words API**
-
-### **8. Get Words by Topic**
-
-- **Endpoint:** `GET /api/words?topic_id=65aefabcdef1234567890`
-- **Response:**
-  ```json
-  [
-    {
-      "_id": "65aef0987654321abcdef",
-      "word": "Apple",
-      "translation": "Apel",
-      "example_sentence": "I eat an apple every day.",
-      "difficulty": "Beginner"
-    },
-    {
-      "_id": "65aef1234abcd5678ef90",
-      "word": "Banana",
-      "translation": "Pisang",
-      "example_sentence": "Bananas are yellow.",
-      "difficulty": "Beginner"
-    }
-  ]
-  ```
 
 ---
 
