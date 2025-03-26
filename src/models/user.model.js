@@ -13,6 +13,13 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String, required: true },
     password: { type: String },
     avatar: { type: String },
+    level: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced"],
+      default: "Beginner",
+    },
+    selected_topics: [{ type: mongoose.Schema.Types.ObjectId, ref: "Topic" }],
+    daily_words: [{ type: mongoose.Schema.Types.ObjectId, ref: "Word" }],
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
