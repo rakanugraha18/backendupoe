@@ -5,9 +5,11 @@ import passport from "./config/passport.js";
 import cookieParser from "cookie-parser";
 import helmet from "helmet"; // ⬅️ Keamanan tambahan
 import morgan from "morgan"; // ⬅️ Logging request
+import errorHandler from "./middleware/error.middleware.js";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
-import errorHandler from "./middleware/error.middleware.js";
+import topicRoutes from "./routes/topic.routes.js";
+import wordRoutes from "./routes/word.routes.js";
 
 const app = express();
 
@@ -52,6 +54,8 @@ app.use(passport.session());
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/topics", topicRoutes);
+app.use("/api/words", wordRoutes);
 
 // Middleware untuk error handling
 app.use(errorHandler);

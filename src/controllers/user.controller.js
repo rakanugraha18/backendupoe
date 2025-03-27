@@ -1,6 +1,6 @@
 import successResponse from "../utils/response.handler.js";
 import CustomError from "../utils/cumtom.error.js";
-import UserService from "../services/user.services.js";
+import UserService from "../services/user.service.js";
 class userController {
   async register(req, res, next) {
     try {

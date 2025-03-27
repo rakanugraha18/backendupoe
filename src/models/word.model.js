@@ -10,7 +10,11 @@ const wordSchema = new mongoose.Schema(
       enum: ["Beginner", "Intermediate", "Advanced"],
       default: "Beginner",
     },
-    topic: { type: Schema.Types.ObjectId, ref: "Topic", required: true },
+    topic: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Topic",
+      required: true,
+    },
   },
   { timestamps: true }
 );
