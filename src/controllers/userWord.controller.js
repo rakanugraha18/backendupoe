@@ -1,20 +1,16 @@
-import express from "express";
-import UserWord from "../models/userWord.model.js";
+import UserWordService from "../services/userWord.service.js";
 
-const router = express.Router();
+class UserWordController {
+  static async selectWords(req, res) {
+    try {
+      const { user_id, words } = req.body;
+      const userWords = await UserWordService.saveUserWords(user_id, words);
 
-router.post("/select-words", async (req, res) => {
-  const { user_id, words } = req.body;
+      res.json({ message: "Words saved for learning", user_words: userWords });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+}
 
-  const userWords = words.map((word) => ({
-    user_id,
-    word,
-    status: "learning",
-  }));
-
-  await UserWord.insertMany(userWords);
-
-  res.json({ message: "Words saved for learning", user_words: userWords });
-});
-
-export default router;
+export default UserWordController;

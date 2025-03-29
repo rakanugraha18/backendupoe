@@ -7,7 +7,7 @@ const userTopicSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    topic: {
+    topic_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Topic",
       required: true,

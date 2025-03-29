@@ -1,20 +1,21 @@
 import mongoose from "mongoose";
 
-const userTopicSchema = new mongoose.Schema(
+const UserWordSchema = new mongoose.Schema(
   {
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    topic: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Topic",
-      required: true,
+    word: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["learning", "learned"],
+      default: "learning",
     },
   },
   { timestamps: true }
 );
 
-const UserTopic = mongoose.model("UserTopic", userTopicSchema);
-export default UserTopic;
+const UserWord = mongoose.model("UserWord", UserWordSchema);
+export default UserWord;

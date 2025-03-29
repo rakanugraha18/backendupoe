@@ -1,55 +1,32 @@
-import Word from "../models/word.model.js";
+import axios from "axios";
+import UserTopic from "../models/userTopic.model.js";
 
 class WordService {
-  async createWord(wordData) {
-    try {
-      const word = new Word(wordData);
-      return await word.save();
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  static async fetchWordsForUser(userId) {
+    const userTopics = await UserTopic.find({ user_id: userId }).populate(
+      "topic_id"
+    );
 
-  async getAllWords() {
-    try {
-      return await Word.find().populate("topic");
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    if (!userTopics.length) return [];
 
-  async getWordById(wordId) {
-    try {
-      const word = await Word.findById(wordId).populate("topic");
-      if (!word) throw new Error("Word not found");
-      return word;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    let allWords = [];
 
-  async updateWord(wordId, updateData) {
-    try {
-      const updatedWord = await Word.findByIdAndUpdate(wordId, updateData, {
-        new: true,
-        runValidators: true,
-      }).populate("topic");
-      if (!updatedWord) throw new Error("Word not found");
-      return updatedWord;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    for (const userTopic of userTopics) {
+      const topic = userTopic.topic_id;
+      const response = await axios.get(
+        `https://api.datamuse.com/words?ml=${topic.name}&topics=${topic.name}`
+      );
 
-  async deleteWord(wordId) {
-    try {
-      const deletedWord = await Word.findByIdAndDelete(wordId);
-      if (!deletedWord) throw new Error("Word not found");
-      return deletedWord;
-    } catch (error) {
-      throw new Error(error.message);
+      const words = response.data.map((w) => ({
+        word: w.word,
+        meaning: "Meaning not available",
+      }));
+
+      allWords.push(...words);
     }
+
+    return allWords;
   }
 }
 
-export default new WordService();
+export default WordService;

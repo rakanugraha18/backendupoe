@@ -18,8 +18,7 @@ const userSchema = new mongoose.Schema(
       enum: ["Beginner", "Intermediate", "Advanced"],
       default: "Beginner",
     },
-    selected_topics: [{ type: mongoose.Schema.Types.ObjectId, ref: "Topic" }],
-    daily_words: [{ type: mongoose.Schema.Types.ObjectId, ref: "Word" }],
+    daily_word_limit: { type: Number, default: 4 },
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }

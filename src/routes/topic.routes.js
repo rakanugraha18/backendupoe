@@ -3,10 +3,7 @@ import TopicController from "../controllers/topic.controller.js";
 
 const router = express.Router();
 
-router.post("/", TopicController.createTopic);
-router.get("/", TopicController.getAllTopics);
-router.get("/:id", TopicController.getTopicById);
-router.put("/:id", TopicController.updateTopic);
-router.delete("/:id", TopicController.deleteTopic);
+router.post("/topics", TopicController.createTopic);
+router.get("/topics", TopicController.getAllTopics);
 
 export default router;

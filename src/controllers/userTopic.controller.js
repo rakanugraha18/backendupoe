@@ -1,16 +1,15 @@
-import express from "express";
-import UserTopic from "../models/userTopic.model.js";
+import UserTopicService from "../services/userTopic.service.js";
 
-const router = express.Router();
+class UserTopicController {
+  static async selectTopics(req, res) {
+    try {
+      const { user_id, topics } = req.body;
+      const userTopics = await UserTopicService.saveUserTopics(user_id, topics);
+      res.json({ message: "Topics saved for user", user_topics: userTopics });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+}
 
-router.post("/select-topics", async (req, res) => {
-  const { user_id, topics } = req.body;
-
-  const userTopics = topics.map((topic_id) => ({ user_id, topic_id }));
-
-  await UserTopic.insertMany(userTopics);
-
-  res.json({ message: "Topics saved for user", user_topics: userTopics });
-});
-
-export default router;
+export default UserTopicController;

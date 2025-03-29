@@ -54,8 +54,7 @@ app.use(passport.session());
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/topics", topicRoutes);
-app.use("/api/words", wordRoutes);
+app.use("/api", wordRoutes, topicRoutes);
 
 // Middleware untuk error handling
 app.use(errorHandler);
