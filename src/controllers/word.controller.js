@@ -4,15 +4,24 @@ class WordController {
   static async getWordsByUser(req, res) {
     try {
       const { userId } = req.query;
-      const words = await WordService.fetchWordsForUser(userId);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
 
-      if (!words.length) {
-        return res.status(404).json({ message: "No topics selected" });
+      if (!userId) {
+        return res
+          .status(400)
+          .json({ success: false, message: "User ID is required" });
       }
 
-      res.json({ user_id: userId, words });
+      const words = await WordService.fetchWordsForUser(userId, page, limit);
+
+      res.json({ success: true, words });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({
+        success: false,
+        message: "Error fetching words",
+        error: error.message,
+      });
     }
   }
 }

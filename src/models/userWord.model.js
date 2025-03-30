@@ -8,6 +8,7 @@ const UserWordSchema = new mongoose.Schema(
       required: true,
     },
     word: { type: String, required: true },
+    translated_word: { type: String, required: true },
     status: {
       type: String,
       enum: ["learning", "learned"],
