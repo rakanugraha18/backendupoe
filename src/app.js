@@ -10,6 +10,8 @@ import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import topicRoutes from "./routes/topic.routes.js";
 import wordRoutes from "./routes/word.routes.js";
+import quizRoutes from "./routes/quiz.routes.js";
+import quizAttemptRoutes from "./routes/quizAttempt.routes.js";
 
 const app = express();
 
@@ -55,6 +57,7 @@ app.use(passport.session());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", wordRoutes, topicRoutes);
+app.use("/api/quiz", quizRoutes, quizAttemptRoutes);
 
 // Middleware untuk error handling
 app.use(errorHandler);
