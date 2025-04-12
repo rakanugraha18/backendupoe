@@ -59,6 +59,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
+app.get("/api/session", (req, res) => {
+  res.json({
+    authenticated: req.isAuthenticated?.() || false,
+    session: req.session,
+    user: req.user || null,
+  });
+});
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
