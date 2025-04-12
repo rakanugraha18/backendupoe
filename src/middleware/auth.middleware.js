@@ -12,6 +12,19 @@ class AuthMiddleware {
     }
     next();
   }
+  // Middleware untuk memastikan user hanya bisa mengakses data miliknya sendiri
+  static isSameUser(req, res, next) {
+    const loggedInUserId = req.user._id?.toString();
+    const requestedUserId = req.params.userId;
+
+    if (loggedInUserId !== requestedUserId) {
+      return res
+        .status(403)
+        .json({ message: "Kamu tidak punya akses ke data ini" });
+    }
+
+    next();
+  }
 }
 
 export default AuthMiddleware;

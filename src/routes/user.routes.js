@@ -18,10 +18,19 @@ router.get(
 router.post("/register", AuthMiddleware.isGuest, UserController.register);
 router.post("/login", AuthMiddleware.isGuest, UserController.login);
 router.post("/logout", AuthMiddleware.isAuthenticated, UserController.logout); // ✅ Pastikan metode dan path benar
-router.post("/select-topics", UserTopicController.selectTopics);
-router.post("/select-words", UserWordController.selectWords);
+router.post(
+  "/select-topics",
+  AuthMiddleware.isAuthenticated,
+  UserTopicController.selectTopics
+);
+router.post(
+  "/select-words",
+  AuthMiddleware.isAuthenticated,
+  UserWordController.selectWords
+);
 router.get(
   "/:id/learning-progress",
+  AuthMiddleware.isAuthenticated,
   LearningProgressController.getUserLearningProgress
 );
 

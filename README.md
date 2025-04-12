@@ -7,7 +7,7 @@ English Learning API is a RESTful API built with Express.js and MongoDB to help 
 ## Base URL
 
 ```
-https://englishupoeapi.com
+http://localhost:5000/api
 ```
 
 ## Authentication
