@@ -20,7 +20,7 @@ Additionally, users can log in using **Google OAuth**.
 
 ## **Authentication API**
 
-### **1. Register User**
+### **Register User**
 
 - **Endpoint:** `POST /api/auth/register`
 - **Request Body:**
@@ -51,7 +51,7 @@ Additionally, users can log in using **Google OAuth**.
   }
   ```
 
-### **2. Login User**
+### **Login User**
 
 - **Endpoint:** `POST /api/auth/login`
 - **Request Body:**
@@ -80,14 +80,14 @@ Additionally, users can log in using **Google OAuth**.
 
 ---
 
-### **3. Login with Google OAuth**
+### **Login with Google OAuth**
 
 - **Endpoint:** `GET /api/auth/google`
 - **Description:** Open your browser to run the Endpoint, then follow the google login.
 
 ---
 
-### **4. Check Status login with Google OAuth**
+### **Check Status login with Google OAuth**
 
 - **Response:**
   ```json
@@ -101,7 +101,7 @@ Additionally, users can log in using **Google OAuth**.
 
 ---
 
-### **5. Logout User**
+### **Logout User**
 
 - **Endpoint:** `POST /api/auth/logout`
 - **Headers:**
@@ -115,59 +115,9 @@ Additionally, users can log in using **Google OAuth**.
   }
   ```
 
----
-
-## **Topics API**
-
-### **6. Get All Topics**
-
-- **Endpoint:** `GET /api/topics`
-- **Response:**
-  ```json
-  [
-    {
-      "_id": "65aefabcdef1234567890",
-      "name": "Food & Drinks"
-    },
-    {
-      "_id": "65aef123456789abcdef0",
-      "name": "Travel & Places"
-    }
-  ]
-  ```
-
----
-
-## **Words API**
-
-### **7. Get Words by Topic**
-
-- **Endpoint:** `GET /api/words?topic_id=65aefabcdef1234567890`
-- **Response:**
-  ```json
-  [
-    {
-      "_id": "65aef0987654321abcdef",
-      "word": "Apple",
-      "translation": "Apel",
-      "example_sentence": "I eat an apple every day.",
-      "difficulty": "Beginner"
-    },
-    {
-      "_id": "65aef1234abcd5678ef90",
-      "word": "Banana",
-      "translation": "Pisang",
-      "example_sentence": "Bananas are yellow.",
-      "difficulty": "Beginner"
-    }
-  ]
-  ```
-
----
-
 ## **User API**
 
-### **8. Get User Profile**
+### **Get User Profile**
 
 - **Endpoint:** `GET /api/users/profile`
 - **Headers:**
@@ -196,7 +146,7 @@ Additionally, users can log in using **Google OAuth**.
   }
   ```
 
-### **9. Get User by ID**
+### **Get User by ID**
 
 - **Endpoint:** `GET /api/users/:id`
 - **Headers:**
@@ -221,6 +171,295 @@ Additionally, users can log in using **Google OAuth**.
   - It does not return the user's email for privacy reasons.
 
 ---
+
+## **Topics API**
+
+### **Add Topics**
+
+- **Endpoint:** `POST /api/topics`
+- **Headers:**
+  ```
+  Authorization: Session <session_token>
+  ```
+- **Request Body:**
+
+  ```json
+  {
+    "name": "Education"
+  }
+  ```
+
+- **Response:**
+
+  ```json
+  {
+    "name": "Education",
+    "_id": "67fa3ee963cd5a1d9a5ccaac",
+    "createdAt": "2025-04-12T10:22:33.280Z",
+    "updatedAt": "2025-04-12T10:22:33.280Z",
+    "__v": 0
+  }
+  ```
+
+  - **Notes:**
+  - This endpoint can only be accessed by authenticated users.
+  - It does not return the user's email for privacy reasons.
+
+### **Get Topics**
+
+- **Endpoint:** `GET /api/topics`
+
+- **Response:**
+
+  ```json
+  [
+    {
+      "_id": "67fa3ee963cd5a1d9a5ccaac",
+      "name": "Education",
+      "createdAt": "2025-04-12T10:22:33.280Z",
+      "updatedAt": "2025-04-12T10:22:33.280Z",
+      "__v": 0
+    }
+  ]
+  ```
+
+---
+
+## **User Selected**
+
+### **Add User selected Topics**
+
+- **Endpoint:** `POST /users/select-topics`
+- **Headers:**
+  ```
+  Authorization: Session <session_token>
+  ```
+- **Request Body:**
+
+  ```json
+  {
+    "user_id": "67fa345193d81b9a3765b024",
+    "topics": ["67fa3ee963cd5a1d9a5ccaac"]
+  }
+  ```
+
+- **Response:**
+
+  ```json
+  {
+    "message": "Topics saved for user",
+    "user_topics": [
+      {
+        "user_id": "67fa345193d81b9a3765b024",
+        "topic_id": "67fa3ee963cd5a1d9a5ccaac",
+        "_id": "67fa403d63cd5a1d9a5ccab1",
+        "__v": 0,
+        "createdAt": "2025-04-12T10:28:13.760Z",
+        "updatedAt": "2025-04-12T10:28:13.760Z"
+      }
+    ]
+  }
+  ```
+
+  - **Notes:**
+  - This endpoint can only be accessed by authenticated users.
+  - It does not return the user's email for privacy reasons.
+
+### **Add User selected Word by Topics**
+
+- **Endpoint:** `POST /users/select-words`
+- **Headers:**
+  ```
+  Authorization: Session <session_token>
+  ```
+- **Request Body:**
+
+  ```json
+  {
+    "user_id": "67fa345193d81b9a3765b024",
+    "words": [
+      { "word": "software", "translated_word": "program" },
+      { "word": "capabilities", "translated_word": "kemampuan" }
+    ]
+  }
+  ```
+
+- **Response:**
+
+  ```json
+  {
+    "success": true,
+    "message": "Words saved for learning",
+    "data": [
+      {
+        "user_id": "67fa345193d81b9a3765b024",
+        "word": "software",
+        "translated_word": "program",
+        "status": "learning",
+        "_id": "67fa437f63cd5a1d9a5ccac4",
+        "__v": 0,
+        "createdAt": "2025-04-12T10:42:07.950Z",
+        "updatedAt": "2025-04-12T10:42:07.950Z"
+      },
+      {
+        "user_id": "67fa345193d81b9a3765b024",
+        "word": "capabilities",
+        "translated_word": "kemampuan",
+        "status": "learning",
+        "_id": "67fa437f63cd5a1d9a5ccac5",
+        "__v": 0,
+        "createdAt": "2025-04-12T10:42:07.950Z",
+        "updatedAt": "2025-04-12T10:42:07.950Z"
+      }
+    ]
+  }
+  ```
+
+  - **Notes:**
+  - This endpoint can only be accessed by authenticated users.
+  - It does not return the user's email for privacy reasons.
+
+---
+
+## **Quizz API**
+
+### **User Generate Quiz**
+
+- **Endpoint:** `POST /quiz/generate`
+- **Headers:**
+  ```
+  Authorization: Session <session_token>
+  ```
+- **Request Body:**
+
+  ```json
+  {
+    "userId": "67fa345193d81b9a3765b024",
+    "limit": 5
+  }
+  ```
+
+- **Response:**
+
+  ```json
+  {
+    "success": true,
+    "quizzes": [
+      {
+        "user_id": "67fa345193d81b9a3765b024",
+        "word": "software",
+        "translated_word": "program",
+        "options": ["program", "kemampuan", "gadget", "peningkatan"],
+        "correct_answer": "program",
+        "status": "pending",
+        "_id": "67fa442963cd5a1d9a5ccacc",
+        "createdAt": "2025-04-12T10:44:57.223Z",
+        "__v": 0
+      },
+      {
+        "user_id": "67fa345193d81b9a3765b024",
+        "word": "capabilities",
+        "translated_word": "kemampuan",
+        "options": ["kemampuan", "program", "infrastruktur", "gadget"],
+        "correct_answer": "kemampuan",
+        "status": "pending",
+        "_id": "67fa442963cd5a1d9a5ccacd",
+        "createdAt": "2025-04-12T10:44:57.224Z",
+        "__v": 0
+      }
+    ]
+  }
+  ```
+
+  - **Notes:**
+  - This endpoint can only be accessed by authenticated users.
+  - It does not return the user's email for privacy reasons.
+
+### **User Submit Quiz**
+
+- **Endpoint:** `POST /quiz/submit`
+- **Headers:**
+  ```
+  Authorization: Session <session_token>
+  ```
+- **Request Body:**
+
+  ```json
+  {
+    "userId": "67fa345193d81b9a3765b024",
+    "quizId": "67fa442963cd5a1d9a5ccacc",
+    "selectedAnswer": "program"
+  }
+  ```
+
+- **Response:**
+
+  ```json
+  {
+    "success": true,
+    "result": {
+      "isCorrect": true,
+      "correct_answer": "program"
+    }
+  }
+  ```
+
+  - **Notes:**
+  - This endpoint can only be accessed by authenticated users.
+  - It does not return the user's email for privacy reasons.
+
+### **Get Score by User**
+
+- **Endpoint:** `GET /quiz/score/:userId`
+- **Headers:**
+  ```
+  Authorization: Session <session_token>
+  ```
+- **Response:**
+
+  ```json
+  {
+    "total": 2,
+    "correct": 2,
+    "score": 100
+  }
+  ```
+
+- **Notes:**
+  - This endpoint can only be accessed by authenticated users.
+  - It does not return the user's email for privacy reasons.
+  - Only user id that metch will show
+
+---
+
+<!-- ---
+
+## **Words API**
+
+### **7. Get Words by Topic**
+
+- **Endpoint:** `GET /api/words?topic_id=65aefabcdef1234567890`
+- **Response:**
+  ```json
+  [
+    {
+      "_id": "65aef0987654321abcdef",
+      "word": "Apple",
+      "translation": "Apel",
+      "example_sentence": "I eat an apple every day.",
+      "difficulty": "Beginner"
+    },
+    {
+      "_id": "65aef1234abcd5678ef90",
+      "word": "Banana",
+      "translation": "Pisang",
+      "example_sentence": "Bananas are yellow.",
+      "difficulty": "Beginner"
+    }
+  ]
+  ```
+
+--- -->
 
 ## **Error Handling**
 
