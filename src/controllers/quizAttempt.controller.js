@@ -1,4 +1,5 @@
 import QuizAttemptService from "../services/quizAttempt.service.js";
+import QuizAttempt from "../models/quizAttempt.model.js";
 
 class QuizAttemptController {
   static async submitAnswer(req, res) {
@@ -17,11 +18,26 @@ class QuizAttemptController {
 
   static async getUserScore(req, res) {
     try {
-      const { userId } = req.query;
+      const { userId } = req.params;
       const score = await QuizAttemptService.getUserScore(userId);
-      res.json({ success: true, score });
+      res.json(score);
     } catch (error) {
-      res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  // 🔥 Tambahan baru
+  static async getAttemptById(req, res) {
+    try {
+      const attempt = await QuizAttempt.findById(req.params.id);
+      if (!attempt) {
+        return res
+          .status(404)
+          .json({ message: "Quiz Attempt tidak ditemukan" });
+      }
+      res.json(attempt);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 }
