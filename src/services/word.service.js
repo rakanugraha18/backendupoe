@@ -37,31 +37,29 @@ class WordService {
     const startIndex = (page - 1) * limit;
     const paginatedWords = allWords.slice(startIndex, startIndex + limit);
 
-    let formattedWords = [];
-
-    for (const word of paginatedWords) {
+    const translationPromises = paginatedWords.map(async (word) => {
       try {
-        // Encode kata sebelum dikirim ke API
         const encodedWord = encodeURIComponent(word);
-        const translationResponse = await axios.get(
+        const response = await axios.get(
           `https://api.mymemory.translated.net/get?q=${encodedWord}&langpair=en|id`
         );
 
-        const translatedWord =
-          translationResponse.data.responseData.translatedText;
-
-        formattedWords.push({
+        return {
           word,
-          translated_word: translatedWord || "Terjemahan tidak tersedia",
-        });
+          translated_word:
+            response.data.responseData.translatedText ||
+            "Terjemahan tidak tersedia",
+        };
       } catch (error) {
         console.error(`Error translating ${word}:`, error.message);
-        formattedWords.push({
+        return {
           word,
           translated_word: "Terjemahan tidak tersedia",
-        });
+        };
       }
-    }
+    });
+
+    const formattedWords = await Promise.all(translationPromises);
 
     return formattedWords;
   }

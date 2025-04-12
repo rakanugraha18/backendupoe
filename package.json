@@ -1,7 +1,7 @@
 {
   "name": "engupoe",
   "version": "1.0.0",
-  "description": "thi is Api for engupoe using expressjs and mongodb on docker",
+  "description": "thi is Api for engupoe using expressjs and mongodb",
   "main": "server.js",
   "type": "module",
   "scripts": {
