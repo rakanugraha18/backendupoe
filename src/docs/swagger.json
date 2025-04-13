@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5000/api",
-      "description": "Local server"
+      "url": "https://backendupoe.onrender.com/api",
+      "description": "Upoe Server"
     }
   ],
   "paths": {
@@ -102,7 +102,7 @@
     "/auth/google": {
       "get": {
         "summary": "Google OAuth Login",
-        "description": "Menggunakan Google untuk login. **Buka link ini http://localhost:5000/api/auth/google di browser**, lalu pilih akun Google Anda. Jika berhasil, session akan dibuat dan bisa cek di endpoint /users/profil dan responnya akan menunjukan data user yang sesuai dengan user google tersebut.",
+        "description": "Menggunakan Google untuk login. **Buka link ini https://backendupoe.onrender.com/api/auth/google di browser**, lalu pilih akun Google Anda. Jika berhasil, session akan dibuat dan bisa cek di endpoint /users/profil dan responnya akan menunjukan data user yang sesuai dengan user google tersebut.",
         "responses": {
           "302": {
             "description": "Redirect ke halaman autentikasi Google"

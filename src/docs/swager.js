@@ -13,7 +13,9 @@ const swaggerDocument = JSON.parse(
 
 const swaggerDocs = (app) => {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-  console.log("Swagger docs tersedia di http://localhost:5000/api-docs");
+  console.log(
+    "Swagger docs tersedia di https://backendupoe.onrender.com/api-docs"
+  );
 };
 
 export default swaggerDocs;

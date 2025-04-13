@@ -12,6 +12,7 @@ import topicRoutes from "./routes/topic.routes.js";
 import wordRoutes from "./routes/word.routes.js";
 import quizRoutes from "./routes/quiz.routes.js";
 import quizAttemptRoutes from "./routes/quizAttempt.routes.js";
+import MongoStore from "connect-mongo";
 
 const app = express();
 
@@ -40,10 +41,15 @@ app.use(
     secret: process.env.SESSION_SECRET || "secretkey",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI, // ⬅️ Pastikan ini tidak undefined
+      collectionName: "sessions",
+    }),
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax", // atau "none" jika frontend beda domain + pakai HTTPS
+      maxAge: 1000 * 60 * 60 * 24, // 1 hari
     },
   })
 );
