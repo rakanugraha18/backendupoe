@@ -272,7 +272,274 @@
         }
       }
     },
-
+    "/users/select-words": {
+      "post": {
+        "summary": "Select Words for User",
+        "description": "Pengguna memilih kata-kata yang ingin dipelajari",
+        "security": [{ "sessionAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "user_id": "67fa7f59bf039c5b56223c2a",
+                "words": [
+                  { "word": "inculcation", "translated_word": "penanaman" },
+                  { "word": "schooling", "translated_word": "pendidikan" },
+                  { "word": "research", "translated_word": "penelitian" },
+                  { "word": "knowledge", "translated_word": "pengetahuan" }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Words berhasil disimpan untuk pembelajaran",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Words saved for learning",
+                  "data": [
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "inculcation",
+                      "translated_word": "penanaman",
+                      "status": "learning",
+                      "_id": "67fb540ac09e92928e16bb68",
+                      "__v": 0,
+                      "createdAt": "2025-04-13T06:04:58.800Z",
+                      "updatedAt": "2025-04-13T06:04:58.800Z"
+                    },
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "schooling",
+                      "translated_word": "pendidikan",
+                      "status": "learning",
+                      "_id": "67fb540ac09e92928e16bb69",
+                      "__v": 0,
+                      "createdAt": "2025-04-13T06:04:58.800Z",
+                      "updatedAt": "2025-04-13T06:04:58.800Z"
+                    },
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "research",
+                      "translated_word": "penelitian",
+                      "status": "learning",
+                      "_id": "67fb540ac09e92928e16bb6a",
+                      "__v": 0,
+                      "createdAt": "2025-04-13T06:04:58.800Z",
+                      "updatedAt": "2025-04-13T06:04:58.800Z"
+                    },
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "knowledge",
+                      "translated_word": "pengetahuan",
+                      "status": "learning",
+                      "_id": "67fb540ac09e92928e16bb6b",
+                      "__v": 0,
+                      "createdAt": "2025-04-13T06:04:58.800Z",
+                      "updatedAt": "2025-04-13T06:04:58.800Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body tidak valid"
+          },
+          "401": {
+            "description": "Unauthorized (belum login)"
+          }
+        }
+      }
+    },
+    "/quiz/generate": {
+      "post": {
+        "summary": "Generate Quiz untuk User",
+        "description": "Menghasilkan soal kuis berdasarkan kata-kata yang sedang dipelajari oleh user",
+        "security": [{ "sessionAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "userId": "67fa7f59bf039c5b56223c2a",
+                "limit": 5
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Kuis berhasil digenerate",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "quizzes": [
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "inculcation",
+                      "translated_word": "penanaman",
+                      "options": [
+                        "penelitian",
+                        "pendidikan",
+                        "pengetahuan",
+                        "penanaman"
+                      ],
+                      "correct_answer": "penanaman",
+                      "status": "pending",
+                      "_id": "67fb5437c09e92928e16bb74",
+                      "createdAt": "2025-04-13T06:05:43.550Z",
+                      "__v": 0
+                    },
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "schooling",
+                      "translated_word": "pendidikan",
+                      "options": [
+                        "penelitian",
+                        "pendidikan",
+                        "pengetahuan",
+                        "penanaman"
+                      ],
+                      "correct_answer": "pendidikan",
+                      "status": "pending",
+                      "_id": "67fb5437c09e92928e16bb75",
+                      "createdAt": "2025-04-13T06:05:43.550Z",
+                      "__v": 0
+                    },
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "research",
+                      "translated_word": "penelitian",
+                      "options": [
+                        "pendidikan",
+                        "pengetahuan",
+                        "penelitian",
+                        "penanaman"
+                      ],
+                      "correct_answer": "penelitian",
+                      "status": "pending",
+                      "_id": "67fb5437c09e92928e16bb76",
+                      "createdAt": "2025-04-13T06:05:43.551Z",
+                      "__v": 0
+                    },
+                    {
+                      "user_id": "67fa7f59bf039c5b56223c2a",
+                      "word": "knowledge",
+                      "translated_word": "pengetahuan",
+                      "options": [
+                        "penelitian",
+                        "pendidikan",
+                        "penanaman",
+                        "pengetahuan"
+                      ],
+                      "correct_answer": "pengetahuan",
+                      "status": "pending",
+                      "_id": "67fb5437c09e92928e16bb77",
+                      "createdAt": "2025-04-13T06:05:43.551Z",
+                      "__v": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request tidak valid"
+          },
+          "401": {
+            "description": "Unauthorized (belum login)"
+          }
+        }
+      }
+    },
+    "/quiz/submit": {
+      "post": {
+        "summary": "Submit Jawaban Kuis",
+        "description": "Mengevaluasi jawaban user terhadap soal kuis tertentu dan mengembalikan hasilnya",
+        "security": [{ "sessionAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "userId": "67fa7f59bf039c5b56223c2a",
+                "quizId": "67fb5437c09e92928e16bb74",
+                "selectedAnswer": "penanaman"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Jawaban berhasil disubmit dan dievaluasi",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "result": {
+                    "isCorrect": true,
+                    "correct_answer": "penanaman"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request tidak valid (misal quizId tidak ditemukan)"
+          },
+          "401": {
+            "description": "Unauthorized (belum login)"
+          }
+        }
+      }
+    },
+    "/quiz/score/{userId}": {
+      "get": {
+        "summary": "Ambil Skor Kuis User",
+        "description": "Mengambil total kuis yang dikerjakan user, jumlah jawaban benar, dan total skor.",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "67fa7f59bf039c5b56223c2a"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Berhasil mengambil skor user",
+            "content": {
+              "application/json": {
+                "example": {
+                  "total": 1,
+                  "correct": 1,
+                  "score": 100
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Permintaan tidak valid"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User atau data kuis tidak ditemukan"
+          }
+        }
+      }
+    },
     "/auth/google": {
       "get": {
         "summary": "Google OAuth Login",
