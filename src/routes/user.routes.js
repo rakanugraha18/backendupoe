@@ -4,6 +4,7 @@ import UserController from "../controllers/user.controller.js";
 import UserTopicController from "../controllers/userTopic.controller.js";
 import UserWordController from "../controllers/userWord.controller.js";
 import LearningProgressController from "../controllers/learningProgress.controller.js";
+import CustomWordController from "../controllers/customWord.controller.js";
 
 const router = express.Router();
 
@@ -32,6 +33,11 @@ router.get(
   "/:id/learning-progress",
   AuthMiddleware.isAuthenticated,
   LearningProgressController.getUserLearningProgress
+);
+router.post(
+  "/custom-word",
+  AuthMiddleware.isAuthenticated,
+  CustomWordController.addCustomWord
 );
 
 export default router;

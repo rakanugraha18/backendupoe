@@ -9,10 +9,17 @@ const UserWordSchema = new mongoose.Schema(
     },
     word: { type: String, required: true },
     translated_word: { type: String, required: true },
+    example_sentence: { type: String },
+    translated_sentence: { type: String }, // ✅ tambahkan ini
     status: {
       type: String,
       enum: ["learning", "learned"],
       default: "learning",
+    },
+    system_word_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Word",
+      default: null,
     },
   },
   { timestamps: true }
