@@ -12,31 +12,6 @@
     }
   ],
   "paths": {
-    "/users/profile": {
-      "get": {
-        "summary": "Get user profile",
-        "description": "Mengambil data profil user yang sedang login",
-        "security": [{ "sessionAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "Berhasil mengambil profil",
-            "content": {
-              "application/json": {
-                "example": {
-                  "id": "123456",
-                  "firstName": "John",
-                  "lastName": "Doe",
-                  "email": "johndoe@example.com"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized (User belum login)"
-          }
-        }
-      }
-    },
     "/users/register": {
       "post": {
         "summary": "Register a new user",
@@ -99,6 +74,205 @@
         }
       }
     },
+    "/users/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "description": "Mengambil data profil user yang sedang login",
+        "security": [{ "sessionAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Berhasil mengambil profil",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "123456",
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "email": "johndoe@example.com"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User belum login)"
+          }
+        }
+      }
+    },
+    "/topics": {
+      "post": {
+        "summary": "Add Topics",
+        "description": "Admin bisa melakukan penambahan topik",
+        "security": [{ "sessionAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "name": "Education"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Topik berhasil ditambahkan",
+            "content": {
+              "application/json": {
+                "example": {
+                  "name": "Education",
+                  "_id": "67fb5351c09e92928e16bb59",
+                  "createdAt": "2025-04-13T06:01:53.866Z",
+                  "updatedAt": "2025-04-13T06:01:53.866Z",
+                  "__v": 0
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Silakan login terlebih dahulu"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get All Topics",
+        "description": "Mengambil data topics",
+        "security": [{ "sessionAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Berhasil mengambil topics",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "_id": "67fb5351c09e92928e16bb59",
+                    "name": "Education",
+                    "createdAt": "2025-04-13T06:01:53.866Z",
+                    "updatedAt": "2025-04-13T06:01:53.866Z",
+                    "__v": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/words": {
+      "get": {
+        "summary": "Get words for a user",
+        "description": "Mengambil daftar kata berdasarkan userId dengan paginasi",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "ID pengguna untuk mengambil kata-kata yang terkait dengan user tersebut",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "123456"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Halaman yang ingin diambil (untuk paginasi)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Jumlah kata per halaman",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "success": true,
+            "words": [
+              {
+                "word": "schooling",
+                "translated_word": "Pendidikan"
+              },
+              {
+                "word": "inculcation",
+                "translated_word": "penanaman"
+              },
+              {
+                "word": "research",
+                "translated_word": "penelitian"
+              },
+              {
+                "word": "knowledge",
+                "translated_word": "pengetahuan"
+              },
+              {
+                "word": "pedagogy",
+                "translated_word": "pendidikan"
+              }
+            ]
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized (User belum login)"
+          }
+        }
+      }
+    },
+    "/users/select-topics": {
+      "post": {
+        "summary": "Select Topics for User",
+        "description": "Pengguna dapat memilih topik-topik yang ingin dipelajari",
+        "security": [{ "sessionAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "topics": ["Education", "Science"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Topik berhasil dipilih",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Topik berhasil dipilih"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+
     "/auth/google": {
       "get": {
         "summary": "Google OAuth Login",
