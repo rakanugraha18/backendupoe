@@ -46,7 +46,7 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       httpOnly: true,
       sameSite: "lax", // atau "none" jika frontend beda domain + pakai HTTPS
       maxAge: 1000 * 60 * 60 * 24, // 1 hari
