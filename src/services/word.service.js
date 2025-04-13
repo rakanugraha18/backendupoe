@@ -1,8 +1,23 @@
 import axios from "axios";
 import UserTopic from "../models/userTopic.model.js";
 import UserWord from "../models/userWord.model.js";
+import Word from "../models/word.model.js";
 
 class WordService {
+  static async findByWord(word) {
+    try {
+      return await Word.findOne({ word }); // Mencari kata berdasarkan nama
+    } catch (error) {
+      console.error("Error in findByWord:", error);
+      throw new Error("Error while finding word");
+    }
+  }
+
+  // Metode lain di WordService
+  static async createWord(wordData) {
+    const newWord = new Word(wordData);
+    return await newWord.save();
+  }
   static async fetchWordsForUser(userId, page = 1, limit = 5) {
     const userTopics = await UserTopic.find({ user_id: userId }).populate(
       "topic_id"
