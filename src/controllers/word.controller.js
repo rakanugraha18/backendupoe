@@ -5,7 +5,7 @@ class WordController {
     try {
       const { userId } = req.query;
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
+      const limit = parseInt(req.query.limit) || 5;
 
       if (!userId) {
         return res
